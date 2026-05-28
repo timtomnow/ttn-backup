@@ -48,6 +48,9 @@ function renderSettings() {
              value="${state.retentionPerApp}"
              style="width:100px; margin-top:8px"
              onchange="setDefaultRetention(this.value)">
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn-secondary" onclick="pruneNow()">Prune now</button>
+      </div>
     </div>
 
     <div class="card">
@@ -98,6 +101,16 @@ async function importFilesUI(fileList) {
 async function setDeviceLabel(v) {
   await dbSetMeta('deviceLabel', v.trim());
   await loadState();
+}
+
+async function pruneNow() {
+  const before = state.bundles.length;
+  await pruneBundles();
+  await loadState();
+  const after = state.bundles.length;
+  const removed = before - after;
+  showToast(removed ? `Pruned ${removed} bundle(s).` : 'Nothing to prune.', 'success');
+  await navigate('settings');
 }
 
 async function setDefaultRetention(v) {

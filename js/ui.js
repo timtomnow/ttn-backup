@@ -90,10 +90,20 @@ async function runBackupAll() {
   try {
     const appIds = APP_REGISTRY.map((a) => a.appId);
     const result = await runBackup(appIds);
-    const msg = result.errors.length
-      ? `Saved bundle with ${Object.keys(result.bundle.appIds).length || result.bundle.appIds.length} app(s). ${result.errors.length} app(s) skipped.`
-      : `Saved bundle (${result.saved.method}).`;
-    showToast(msg, 'success');
+    const okCount = (result.bundle.appIds || []).length;
+    if (result.errors.length) {
+      // Partial success — surface a modal listing what failed.
+      const rows = result.errors.map((e) => `
+        <li><strong>${esc(getApp(e.appId)?.name || e.appId)}:</strong> ${esc(e.error)}</li>
+      `).join('');
+      showModal('Backup saved with errors', `
+        <p>${okCount} app(s) saved via ${esc(result.saved.method)}. ${result.errors.length} skipped:</p>
+        <ul style="margin-top:8px; padding-left:20px; line-height:1.6; color:var(--fg-muted); font-size:13px">${rows}</ul>
+        <p class="muted" style="font-size:12px; margin-top:12px">Likely cause: the app's TTNBackupAdapter isn't loaded, or its path in APP_REGISTRY is wrong.</p>
+      `, null);
+    } else {
+      showToast(`Bundle saved (${result.saved.method}).`, 'success');
+    }
     if (state.page === 'dashboard' || state.page === 'history') {
       await navigate(state.page, state.params);
     }
@@ -103,6 +113,26 @@ async function runBackupAll() {
     if (btn) { btn.disabled = false; btn.textContent = 'Backup all'; }
   }
 }
+
+// Install prompt — captured globally so the dashboard can offer an Install
+// button on supported browsers (Chrome / Edge desktop + Android).
+let _deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  // Re-render the dashboard if it's already on screen so the button appears.
+  if (state.page === 'dashboard') navigate('dashboard');
+});
+
+async function triggerInstall() {
+  if (!_deferredInstallPrompt) return;
+  _deferredInstallPrompt.prompt();
+  try { await _deferredInstallPrompt.userChoice; } catch {}
+  _deferredInstallPrompt = null;
+  if (state.page === 'dashboard') navigate('dashboard');
+}
+
+function canPromptInstall() { return !!_deferredInstallPrompt; }
 
 // Init.
 document.addEventListener('DOMContentLoaded', async () => {

@@ -12,7 +12,7 @@ const APP_REGISTRY = [
     appId: 'fintom-planning',
     name: 'FinTom Financial Planning',
     icon: '📈',
-    path: '/financial-plan/',           // GitHub Pages path
+    path: '/fintom-planning/',          // GitHub Pages path
     description: 'Self-contained financial planning app.',
   },
   {

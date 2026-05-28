@@ -61,6 +61,14 @@ function renderDashboard() {
         <button class="btn-primary" style="margin-top:8px" onclick="navigate('settings')">Open Settings</button>
       </div>
     ` : ''}
+
+    ${canPromptInstall() ? `
+      <div class="card" style="margin-top:16px">
+        <h3>Install as app</h3>
+        <p>Add ttn-backup to your home screen for one-tap access.</p>
+        <button class="btn-primary" style="margin-top:8px" onclick="triggerInstall()">Install</button>
+      </div>
+    ` : ''}
   `;
 }
 

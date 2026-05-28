@@ -245,15 +245,25 @@ ttn-backup/
 
 ## Build slices
 
-1. **Slice 1 (this commit)**: scaffold + IndexedDB + folder choice +
-   backup-all + history list + restore. Round-trip self-test using a tiny
-   `sample_apps/demo-host.html` adapter.
-2. **Slice 2**: wire `fintom-planning` and `ttn-list` adapters; verify
-   real backup/restore.
-3. **Slice 3**: schedules + `.ics` generation + URL-action handling
-   (`?run=<id>`).
-4. **Slice 4**: polish — install prompt, error states, retention edge
-   cases, design pass against ttn-list aesthetic.
+1. **Slice 1 (done)**: scaffold + IndexedDB + folder choice + backup-all
+   + history list + restore. Round-trip self-test fixture in
+   `sample_apps/demo-host.html`.
+2. **Slice 2 (done)**: wired `fintom-planning` and `ttn-list` adapters.
+   - fintom: adapter in `index.html`, Restore button in `settings.js`.
+   - ttn-list: adapter in `src/lib/ttnBackup.ts` (installed from
+     `App.tsx` mount), Restore button in `src/pages/Settings.tsx`,
+     script tag in `index.html`.
+   - Path overrides: APP_REGISTRY uses `/fintom-planning/` (matches
+     actual GitHub Pages path) and `/ttn-list/`.
+3. **Slice 3 (done)**: schedules with edit support, next-run computation
+   and display, `.ics` download per schedule, `?run=<id>` deep-link
+   handling in `ui.js` init.
+4. **Slice 4 (done)**: install prompt capture via `beforeinstallprompt`
+   surfaced on dashboard; partial-failure modal listing skipped apps
+   from `runBackupAll`; explicit "Prune now" action in Settings;
+   light/dark theme support via `prefers-color-scheme` and palette
+   aligned to ttn-list's zinc/ink tone; theme-color meta tags split for
+   light/dark; bumped SW `CACHE_VERSION` to v2.
 
 ## Open questions / future work
 
