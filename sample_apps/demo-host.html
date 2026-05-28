@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ttn-backup demo host</title>
+  <style>
+    body { font: 14px -apple-system, BlinkMacSystemFont, sans-serif; padding: 16px; max-width: 480px; margin: auto; }
+    button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid #888; background: #eee; cursor: pointer; }
+    .count { font-size: 32px; font-weight: 700; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <h1>ttn-backup demo host</h1>
+  <p>Trivial app used to verify the backup round-trip. Stores a counter in
+     <code>localStorage['demo-host-data']</code>.</p>
+  <div class="count" id="count">0</div>
+  <button onclick="inc()">+1</button>
+  <button onclick="reset()">Reset</button>
+
+  <hr>
+  <p>To make this discoverable by the ttn-backup utility, add it to
+     <code>APP_REGISTRY</code> in <code>js/data.js</code>:</p>
+  <pre style="background:#f0f0f0; padding:8px; font-size:12px">
+{ appId: 'demo-host', name: 'Demo Host', icon: '🧪',
+  path: 'sample_apps/demo-host.html',
+  description: 'Round-trip test fixture.' },</pre>
+
+  <script>
+    const KEY = 'demo-host-data';
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY)) || { count: 0 }; }
+      catch { return { count: 0 }; }
+    }
+    function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+    let data = load();
+    function render() { document.getElementById('count').textContent = data.count; }
+    function inc() { data.count++; save(data); render(); }
+    function reset() { data = { count: 0 }; save(data); render(); }
+    render();
+
+    window.TTNBackupAdapter = {
+      appId: 'demo-host',
+      appName: 'Demo Host',
+      version: 1,
+      exportData: () => data,
+      importData: (incoming) => {
+        data = incoming && typeof incoming === 'object' ? incoming : { count: 0 };
+        save(data);
+        render();
+      },
+    };
+  </script>
+  <script src="../client.js" defer></script>
+</body>
+</html>
