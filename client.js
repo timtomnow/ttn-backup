@@ -53,12 +53,29 @@
   }
 
   if (inIframe) {
+    // Apps that install their adapter asynchronously (e.g. after a Dexie
+    // init Promise inside a React effect) may not have `TTNBackupAdapter`
+    // on `window` yet when the host's first `hello` arrives. Defer such
+    // hellos and answer them as soon as the adapter shows up. Cap the
+    // wait to avoid running forever on apps that never install one.
+    const ADAPTER_WAIT_MS = 14000;   // just under the host's 15s timeout
+    const ADAPTER_POLL_MS = 100;
+    function whenAdapter(cb) {
+      const a = getAdapter();
+      if (a) { cb(a); return; }
+      const started = Date.now();
+      const handle = setInterval(() => {
+        const got = getAdapter();
+        if (got) { clearInterval(handle); cb(got); return; }
+        if (Date.now() - started >= ADAPTER_WAIT_MS) clearInterval(handle);
+      }, ADAPTER_POLL_MS);
+    }
+
     // Send a proactive ready as soon as we can identify the adapter.
     function tryProactiveReady() {
-      const a = getAdapter();
-      if (a) {
+      whenAdapter((a) => {
         try { parent.postMessage({ type: 'ttn-backup:ready', requestId: 'init', appId: a.appId, appName: a.appName, version: a.version || 1 }, location.origin); } catch {}
-      }
+      });
     }
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       tryProactiveReady();
@@ -70,13 +87,17 @@
       if (ev.origin !== location.origin) return;
       const msg = ev.data;
       if (!msg || typeof msg !== 'object') return;
-      const a = getAdapter();
-      if (!a) return;
 
+      // Hello may arrive before the adapter has been installed; wait for it.
       if (msg.type === 'ttn-backup:hello') {
-        postReady(msg.requestId);
+        whenAdapter(() => postReady(msg.requestId));
         return;
       }
+
+      // Export / import only follow a ready handshake, so the adapter must
+      // exist by now. Still guard defensively.
+      const a = getAdapter();
+      if (!a) return;
 
       if (msg.type === 'ttn-backup:export') {
         try {

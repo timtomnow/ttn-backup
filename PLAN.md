@@ -285,6 +285,12 @@ ttn-backup/
      `Settings.tsx`, script tag in `index.html`.
    - `APP_REGISTRY` entries added in `js/data.js`; SW `CACHE_VERSION`
      bumped to v3.
+6. **Slice 6 (done)**: hardened `client.js` against asynchronously-
+   installed adapters. dart-trainer installs its adapter only after
+   `DexieStorageAdapter.init()` resolves, which lands after the host's
+   one-shot `hello` ping. `client.js` now polls (up to ~14s) for
+   `window.TTNBackupAdapter` and replays a deferred ready when the
+   adapter shows up. SW `CACHE_VERSION` bumped to v4.
 
 ## Open questions / future work
 
