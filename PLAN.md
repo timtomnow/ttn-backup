@@ -192,6 +192,9 @@ Apps wired up in v1:
 
 - `fintom-planning`
 - `ttn-list`
+- `stock-style-analyzer` (localStorage, same pattern as fintom)
+- `dart-trainer` (Dexie/IndexedDB, adapter installed from `StorageProvider`)
+- `plot-my-notes` (Dexie/IndexedDB, same pattern as ttn-list)
 
 Pages in v1:
 
@@ -264,6 +267,24 @@ ttn-backup/
    light/dark theme support via `prefers-color-scheme` and palette
    aligned to ttn-list's zinc/ink tone; theme-color meta tags split for
    light/dark; bumped SW `CACHE_VERSION` to v2.
+5. **Slice 5 (done)**: wired three additional apps.
+   - `stock-style-analyzer`: localStorage `state.data` adapter inline in
+     `index.html`, Restore button in the Settings → Data card, script
+     tag points at `../ttn-backup/client.js`.
+   - `dart-trainer`: adapter in `src/lib/ttnBackup.ts` taking a
+     `StorageAdapter` instance (the Dexie adapter is provider-scoped, so
+     install runs inside `StorageProvider` after `adapter.init()`);
+     `exportData` returns `buildManifest(...)`, `importData` wraps the
+     payload back into a `File` and feeds the existing
+     `validateBackupFile` → `applyManifest` path so the schema /
+     content-hash / migration checks all still run. Restore button in
+     `DataSection.tsx`, script tag in `index.html`.
+   - `plot-my-notes`: adapter in `src/lib/ttnBackup.ts`, installed from
+     `main.tsx`. Reuses `exportData` / `parseExportPayload` /
+     `importData(payload, 'replace')` directly. Restore button in
+     `Settings.tsx`, script tag in `index.html`.
+   - `APP_REGISTRY` entries added in `js/data.js`; SW `CACHE_VERSION`
+     bumped to v3.
 
 ## Open questions / future work
 

@@ -22,6 +22,27 @@ const APP_REGISTRY = [
     path: '/ttn-list/',
     description: 'Shopping / chores / projects list PWA.',
   },
+  {
+    appId: 'stock-style-analyzer',
+    name: 'Stock Style Analyzer',
+    icon: '📊',
+    path: '/stock-style-analyzer/',
+    description: 'Score stocks on Value/Growth and plot them on a 3×3 style box.',
+  },
+  {
+    appId: 'dart-trainer',
+    name: 'TTN Darts Trainer',
+    icon: '🎯',
+    path: '/dart-trainer/',
+    description: 'Local-first darts training and stats companion.',
+  },
+  {
+    appId: 'plot-my-notes',
+    name: 'Plot My Notes',
+    icon: '📝',
+    path: '/plot-my-notes/',
+    description: 'Local-first journaling and emotional-tracking on custom axes.',
+  },
 ];
 
 // Find an app definition. Returns undefined if the appId isn't registered.

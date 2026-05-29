@@ -66,6 +66,13 @@ how to add a new app.
 
 ## V1 status
 
-V1 ships with `fintom-planning` and `ttn-list` adapters. Adding more apps
-is a one-line entry in `js/data.js` plus dropping the adapter snippet
-into the new app's HTML.
+V1 ships with adapters for:
+
+- `fintom-planning`
+- `ttn-list`
+- `stock-style-analyzer`
+- `dart-trainer`
+- `plot-my-notes`
+
+Adding more apps is a one-line entry in `js/data.js` plus dropping the
+adapter snippet into the new app's HTML.

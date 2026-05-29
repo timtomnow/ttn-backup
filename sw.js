@@ -1,7 +1,7 @@
 // ttn-backup service worker — cache-first.
 // Bump CACHE_VERSION to invalidate installed clients.
 
-const CACHE_VERSION = 'ttn-backup-v2';
+const CACHE_VERSION = 'ttn-backup-v3';
 
 const CORE_ASSETS = [
   './',
