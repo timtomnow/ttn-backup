@@ -23,6 +23,11 @@ function renderSettings() {
       <div><h1>Settings</h1><p>Storage, recovery, and device.</p></div>
     </div>
 
+    <div class="card card-clickable" onclick="navigate('help')">
+      <h3>Help &amp; guides</h3>
+      <p class="muted">How to back up, schedule, and restore your apps.</p>
+    </div>
+
     ${folderCard}
 
     <div class="card">

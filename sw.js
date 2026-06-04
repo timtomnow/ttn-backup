@@ -1,7 +1,7 @@
 // ttn-backup service worker — cache-first.
 // Bump CACHE_VERSION to invalidate installed clients.
 
-const CACHE_VERSION = 'ttn-backup-v4';
+const CACHE_VERSION = 'ttn-backup-v5';
 
 const CORE_ASSETS = [
   './',
@@ -14,12 +14,20 @@ const CORE_ASSETS = [
   './js/storage.js',
   './js/backup.js',
   './js/schedule.js',
+  './js/help.js',
   './js/ui.js',
   './js/pages/dashboard.js',
   './js/pages/apps.js',
   './js/pages/history.js',
   './js/pages/schedules.js',
   './js/pages/settings.js',
+  './js/pages/help.js',
+];
+
+// In-app help guides (ttn-docs). Add each new docs/help/<slug>.md here so it
+// precaches for offline; keep ./docs/help/index.json in sync with the files.
+const HELP_ASSETS = [
+  './docs/help/index.json',
 ];
 
 const OPTIONAL_ASSETS = [
@@ -32,7 +40,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_VERSION);
     await cache.addAll(CORE_ASSETS);
-    await Promise.all(OPTIONAL_ASSETS.map((url) => cache.add(url).catch(() => {})));
+    await Promise.all([...OPTIONAL_ASSETS, ...HELP_ASSETS].map((url) => cache.add(url).catch(() => {})));
     self.skipWaiting();
   })());
 });

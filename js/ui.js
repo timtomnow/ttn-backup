@@ -6,6 +6,7 @@ const PAGES = {
   history:   () => renderHistory(),
   schedules: () => renderSchedules(),
   settings:  () => renderSettings(),
+  help:      () => renderHelp(),
 };
 
 async function navigate(page, params = {}) {
@@ -15,9 +16,11 @@ async function navigate(page, params = {}) {
   const main = document.getElementById('main');
   const renderer = PAGES[page] || PAGES.dashboard;
   main.innerHTML = renderer();
-  // Update bottom nav active state.
+  // Update bottom nav active state. The Help page has no nav button of its own;
+  // it lives under Settings, so keep Settings highlighted while it's open.
+  const activePage = page === 'help' ? 'settings' : page;
   document.querySelectorAll('.bottom-nav-item').forEach((el) => {
-    el.classList.toggle('active', el.dataset.page === page);
+    el.classList.toggle('active', el.dataset.page === activePage);
   });
   // Scroll to top on every nav.
   main.scrollTop = 0;
