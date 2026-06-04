@@ -1,1 +1,16 @@
-[]
+[
+  "get-started",
+  "choose-where-backups-are-saved",
+  "install-ttn-backup",
+  "back-up-all-your-apps",
+  "back-up-a-single-app",
+  "test-an-app-connection",
+  "schedule-recurring-backups",
+  "edit-or-delete-a-schedule",
+  "restore-an-app-from-a-backup",
+  "browse-your-backup-history",
+  "rebuild-backups-after-a-wipe",
+  "set-how-many-backups-to-keep",
+  "name-this-device",
+  "clear-the-local-index"
+]

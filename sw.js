@@ -28,6 +28,20 @@ const CORE_ASSETS = [
 // precaches for offline; keep ./docs/help/index.json in sync with the files.
 const HELP_ASSETS = [
   './docs/help/index.json',
+  './docs/help/get-started.md',
+  './docs/help/choose-where-backups-are-saved.md',
+  './docs/help/install-ttn-backup.md',
+  './docs/help/back-up-all-your-apps.md',
+  './docs/help/back-up-a-single-app.md',
+  './docs/help/test-an-app-connection.md',
+  './docs/help/schedule-recurring-backups.md',
+  './docs/help/edit-or-delete-a-schedule.md',
+  './docs/help/restore-an-app-from-a-backup.md',
+  './docs/help/browse-your-backup-history.md',
+  './docs/help/rebuild-backups-after-a-wipe.md',
+  './docs/help/set-how-many-backups-to-keep.md',
+  './docs/help/name-this-device.md',
+  './docs/help/clear-the-local-index.md',
 ];
 
 const OPTIONAL_ASSETS = [
