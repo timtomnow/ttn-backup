@@ -43,6 +43,13 @@ const APP_REGISTRY = [
     path: '/plot-my-notes/',
     description: 'Local-first journaling and emotional-tracking on custom axes.',
   },
+  {
+    appId: 'ttn-chords',
+    name: 'TTN Chords',
+    icon: '🎵',
+    path: '/ttn-chords/',
+    description: 'A collection of music tools, chords, and songs for playing along.',
+  },
 ];
 
 // Find an app definition. Returns undefined if the appId isn't registered.
